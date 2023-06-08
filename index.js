@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 app.set("port", process.env.PORT || 9000);
 
+const routes = require("./api_routes")
+
 const mysql = require("mysql");
 const myconn = require("express-myconnection");
 const dbOptions = {
@@ -15,15 +17,14 @@ const dbOptions = {
 
 //---------------------------------MIDDLEWARES---------------------------
 app.use(myconn(mysql, dbOptions, "single"));
+app.use(express.json())
 
 //---------------------------------ROUTES---------------------------
 app.get("/", (req, res) => {
   res.send("Welcome to my api");
 });
+app.use('/api', routes)
 
-app.get("/api", (req, res) => {
-    res.send("API");
-  });
 
 //---------------------------------SERVER RUNING---------------------------
 app.listen(app.get("port"), () => {
